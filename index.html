@@ -1,105 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YOUBOOK AI - Video Scheduler</title>
+    <title>YOUBOOK AI - جدولة الفيديوهات</title>
+    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 900px;
+        }
+        .card-header {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: bold;
+        }
+        .video-section {
+            background-color: #ffffff;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+        .time-input input {
+            width: 60px;
+            text-align: center;
+        }
+        .status-section {
+            display: none; /* مخفي بشكل افتراضي */
+        }
+    </style>
 </head>
 <body>
     <div class="container my-5">
-        <!-- Header -->
-        <div class="text-center mb-5">
-            <div class="logo-container mb-3">
-                <i class="fas fa-video text-primary" style="font-size: 3rem;"></i>
-            </div>
-            <h1 class="display-4 fw-bold text-primary">YOUBOOK AI</h1>
-            <p class="lead text-muted">Automate YouTube to Facebook Video Scheduling</p>
+        <div class="text-center mb-4">
+            <h1 class="display-5">YOUBOOK AI</h1>
+            <p class="lead">أتمتة وجدولة فيديوهات يوتيوب للنشر على فيسبوك</p>
         </div>
 
         <form id="youbook-form">
-            <!-- Step 1: Videos -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0"><i class="fas fa-play-circle me-2"></i>Step 1: Add Your Videos</h5>
+            <!-- قسم الفيديوهات -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    الخطوة 1: إضافة الفيديوهات
                 </div>
                 <div class="card-body">
-                    <p class="text-muted mb-4">Add up to 5 YouTube videos with trim times and initial titles.</p>
-                    <div id="video-inputs"></div>
+                    <p class="text-muted">أضف ما يصل إلى 5 فيديوهات مع تحديد مقاطع القص والعناوين الأولية.</p>
+                    <div id="video-inputs">
+                        <!-- سيتم إضافة حقول الفيديو هنا عبر JavaScript -->
+                    </div>
                 </div>
             </div>
 
-            <!-- Step 2: Gemini -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-magic me-2"></i>Step 2: AI Title Optimization</h5>
+            <!-- قسم Gemini -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    الخطوة 2: تحسين العناوين (بواسطة Gemini )
                 </div>
                 <div class="card-body">
-                    <label for="gemini-prompt" class="form-label fw-bold">Gemini Prompt for Title Optimization:</label>
-                    <textarea class="form-control" id="gemini-prompt" rows="4" 
-                        placeholder="Example: Rewrite these titles to be more engaging and clickable for Facebook. Use simple, direct language that grabs attention."></textarea>
+                    <label for="gemini-prompt" class="form-label">اكتب البرومبت (التوجيه) الذي سيستخدمه Gemini لإعادة صياغة العناوين:</label>
+                    <textarea class="form-control" id="gemini-prompt" rows="4" placeholder="مثال: أعد صياغة العناوين التالية لجعلها أكثر تشويقاً وجذباً للانتباه على منصة فيسبوك. استخدم لغة بسيطة ومباشرة."></textarea>
                 </div>
             </div>
 
-            <!-- Step 3: Facebook Settings -->
-            <div class="card mb-4 shadow-sm">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0"><i class="fab fa-facebook me-2"></i>Step 3: Facebook Publishing Settings</h5>
+            <!-- قسم فيسبوك والجدولة -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    الخطوة 3: إعدادات النشر على فيسبوك
                 </div>
                 <div class="card-body">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="fb-page-id" class="form-label fw-bold">Facebook Page ID</label>
+                            <label for="fb-page-id" class="form-label">معرف صفحة فيسبوك (Page ID)</label>
                             <input type="text" class="form-control" id="fb-page-id" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="fb-access-token" class="form-label fw-bold">Access Token</label>
+                            <label for="fb-access-token" class="form-label">رمز الوصول (Access Token)</label>
                             <input type="password" class="form-control" id="fb-access-token" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="start-datetime" class="form-label fw-bold">First Video Publish Time</label>
+                            <label for="start-datetime" class="form-label">توقيت نشر أول فيديو</label>
                             <input type="datetime-local" class="form-control" id="start-datetime" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="interval-minutes" class="form-label fw-bold">Interval Between Posts (minutes)</label>
+                            <label for="interval-minutes" class="form-label">الفاصل الزمني بين المنشورات (بالدقائق)</label>
                             <input type="number" class="form-control" id="interval-minutes" value="60" min="1" required>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Submit Button -->
-            <div class="d-grid mb-4">
-                <button type="submit" class="btn btn-primary btn-lg py-3">
-                    <i class="fas fa-rocket me-2"></i>Schedule & Publish Videos
-                </button>
+            <!-- زر الإرسال -->
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary btn-lg">جدولة ونشر</button>
             </div>
         </form>
 
-        <!-- Progress Section -->
-        <div id="status-section" class="card shadow-sm" style="display: none;">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-cog fa-spin me-2"></i>Processing Status</h5>
+        <!-- قسم حالة التقدم -->
+        <div id="status-section" class="card mt-4 status-section">
+            <div class="card-header bg-success">
+                حالة التقدم
             </div>
             <div class="card-body">
-                <p id="status-message" class="mb-3">Starting process...</p>
-                <div class="progress mb-3" style="height: 25px;">
-                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" 
-                         role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                        0%
-                    </div>
-                </div>
-                <div id="results-section" style="display: none;">
-                    <h6 class="text-success"><i class="fas fa-check-circle me-2"></i>Results:</h6>
-                    <ul id="results-list" class="list-group"></ul>
+                <p id="status-message">جاري بدء العملية...</p>
+                <div class="progress">
+                    <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
                 </div>
             </div>
         </div>
+
     </div>
 
+    <!-- Bootstrap 5 JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="script.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function( ) {
+            const videoInputsContainer = document.getElementById('video-inputs');
+            const form = document.getElementById('youbook-form');
+            const statusSection = document.getElementById('status-section');
+            const progressBar = document.getElementById('progress-bar');
+            const statusMessage = document.getElementById('status-message');
+
+            // إنشاء 5 حقول للفيديوهات بشكل ديناميكي
+            for (let i = 1; i <= 5; i++) {
+                const videoDiv = document.createElement('div');
+                videoDiv.className = 'video-section mb-3';
+                videoDiv.innerHTML = `
+                    <h5>الفيديو ${i}</h5>
+                    <div class="mb-2">
+                        <label for="video-url-${i}" class="form-label">رابط يوتيوب</label>
+                        <input type="url" class="form-control" id="video-url-${i}" placeholder="https://www.youtube.com/watch?v=...">
+                    </div>
+                    <div class="row g-3 align-items-center mb-2">
+                        <div class="col-auto"><label class="form-label">وقت البدء:</label></div>
+                        <div class="col-auto time-input d-flex">
+                            <input type="number" class="form-control" id="start-h-${i}" placeholder="س" min="0" value="0">
+                            <span class="mx-1">:</span>
+                            <input type="number" class="form-control" id="start-m-${i}" placeholder="د" min="0" max="59" value="0">
+                            <span class="mx-1">:</span>
+                            <input type="number" class="form-control" id="start-s-${i}" placeholder="ث" min="0" max="59" value="0">
+                        </div>
+                        <div class="col-auto"><label class="form-label ms-3">وقت النهاية:</label></div>
+                        <div class="col-auto time-input d-flex">
+                            <input type="number" class="form-control" id="end-h-${i}" placeholder="س" min="0" value="0">
+                            <span class="mx-1">:</span>
+                            <input type="number" class="form-control" id="end-m-${i}" placeholder="د" min="0" max="59" value="0">
+                            <span class="mx-1">:</span>
+                            <input type="number" class="form-control" id="end-s-${i}" placeholder="ث" min="0" max="59" value="0">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="video-title-${i}" class="form-label">العنوان الأولي</label>
+                        <input type="text" class="form-control" id="video-title-${i}" placeholder="اكتب عنوانًا مؤقتًا هنا">
+                    </div>
+                `;
+                videoInputsContainer.appendChild(videoDiv );
+            }
+
+            // التعامل مع إرسال النموذج
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // منع الإرسال الفعلي للنموذج
+                
+                // إظهار قسم الحالة وتصفير شريط التقدم
+                statusSection.style.display = 'block';
+                updateProgress(0, 'يتم تجميع البيانات...');
+
+                // جمع البيانات من النموذج
+                const formData = {
+                    videos: [],
+                    gemini_prompt: document.getElementById('gemini-prompt').value,
+                    facebook: {
+                        page_id: document.getElementById('fb-page-id').value,
+                        access_token: document.getElementById('fb-access-token').value,
+                        start_datetime: document.getElementById('start-datetime').value,
+                        interval_minutes: parseInt(document.getElementById('interval-minutes').value)
+                    }
+                };
+
+                for (let i = 1; i <= 5; i++) {
+                    const url = document.getElementById(`video-url-${i}`).value;
+                    if (url) { // فقط أضف الفيديو إذا كان الرابط موجودًا
+                        formData.videos.push({
+                            url: url,
+                            title: document.getElementById(`video-title-${i}`).value,
+                            start_time: `${document.getElementById(`start-h-${i}`).value}:${document.getElementById(`start-m-${i}`).value}:${document.getElementById(`start-s-${i}`).value}`,
+                            end_time: `${document.getElementById(`end-h-${i}`).value}:${document.getElementById(`end-m-${i}`).value}:${document.getElementById(`end-s-${i}`).value}`
+                        });
+                    }
+                }
+
+                console.log('البيانات التي سيتم إرسالها:', formData);
+                updateProgress(10, 'تم تجميع البيانات. جاري الإرسال إلى الخادم...');
+
+                // هنا سنقوم لاحقًا بإضافة كود لإرسال البيانات إلى Google Colab
+                // باستخدام fetch() API
+                // مثال وهمي لمحاكاة العملية
+                simulateProcessing();
+            });
+
+            function updateProgress(percentage, message) {
+                progressBar.style.width = percentage + '%';
+                progressBar.setAttribute('aria-valuenow', percentage);
+                progressBar.innerText = percentage + '%';
+                statusMessage.innerText = message;
+            }
+
+            // دالة وهمية لمحاكاة عملية المعالجة في الخلفية
+            function simulateProcessing() {
+                let progress = 10;
+                const messages = [
+                    { p: 20, msg: 'تم استلام الطلب، جاري تحميل الفيديو الأول...' },
+                    { p: 35, msg: 'جاري قص الفيديو الأول...' },
+                    { p: 50, msg: 'جاري تحسين العناوين عبر Gemini...' },
+                    { p: 65, msg: 'جاري تحميل الفيديو الثاني...' },
+                    { p: 80, msg: 'جاري جدولة المنشورات على فيسبوك...' },
+                    { p: 100, msg: 'اكتملت العملية بنجاح! تم جدولة جميع الفيديوهات.' }
+                ];
+
+                const interval = setInterval(() => {
+                    if (messages.length > 0) {
+                        const next = messages.shift();
+                        updateProgress(next.p, next.msg);
+                    } else {
+                        clearInterval(interval);
+                        // تغيير لون شريط التقدم إلى الأخضر عند الاكتمال
+                        progressBar.classList.remove('progress-bar-animated');
+                        progressBar.classList.remove('bg-primary');
+                        progressBar.classList.add('bg-success');
+                    }
+                }, 2000); // تأخير ثانيتين بين كل تحديث
+            }
+        });
+    </script>
 </body>
 </html>
