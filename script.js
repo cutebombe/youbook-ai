@@ -1,5 +1,5 @@
 // Configuration - YOU WILL UPDATE THIS WITH YOUR COLAB URL
-const BACKEND_URL = 'YOUR_COLAB_NGROK_URL_HERE'; // We'll update this later
+const BACKEND_URL = 'https://5dd98dacbb6b.ngrok-free.app'; // We'll update this later
 
 document.addEventListener('DOMContentLoaded', function() {
     const videoInputsContainer = document.getElementById('video-inputs');
